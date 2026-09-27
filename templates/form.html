@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}{% if mode == 'create' %}새 기록{% else %}기록 수정{% endif %}{% endblock %}
+
+{% block content %}
+  <h1>{% if mode == 'create' %}새 기록 작성{% else %}기록 수정{% endif %}</h1>
+
+  {# 등록과 수정이 같은 템플릿을 쓴다.
+     화면이 거의 같은데 파일을 둘로 나누면, 필드 하나 추가할 때 두 군데를 고쳐야 한다.
+     다른 점은 action 주소와 버튼 문구뿐이라 변수로 처리했다. #}
+
+  {% if errors %}
+    <div class="alert">
+      <strong>입력값을 확인해 주세요.</strong>
+      <ul>
+        {% for field, message in errors.items() %}
+          <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+
+  {# method="post" — 등록/수정은 서버 상태를 바꾸므로 반드시 POST #}
+  <form class="form" method="post" action="{{ action }}">
+    <div class="field">
+      <label for="title">제목 *</label>
+      <input type="text" id="title" name="title" maxlength="100"
+             value="{{ values.title or '' }}"
+             class="{% if errors.title %}is-invalid{% endif %}"
+             placeholder="예: 제너레이터와 스트리밍 처리">
+      {% if errors.title %}<p class="field__error">{{ errors.title }}</p>{% endif %}
+    </div>
+
+    <div class="field">
+      <label for="studied_on">학습일 *</label>
+      <input type="date" id="studied_on" name="studied_on"
+             value="{{ values.studied_on or '' }}"
+             class="{% if errors.studied_on %}is-invalid{% endif %}">
+      {% if errors.studied_on %}<p class="field__error">{{ errors.studied_on }}</p>{% endif %}
+    </div>
+
+    <div class="field">
+      <label for="minutes">학습 시간(분) *</label>
+      <input type="number" id="minutes" name="minutes" min="1" max="1440"
+             value="{{ values.minutes or '' }}"
+             class="{% if errors.minutes %}is-invalid{% endif %}"
+             placeholder="90">
+      {% if errors.minutes %}<p class="field__error">{{ errors.minutes }}</p>{% endif %}
+    </div>
+
+    <div class="field">
+      <label for="category">분야</label>
+      <select id="category" name="category">
+        {% for choice in categories %}
+          <option value="{{ choice }}" {% if values.category == choice %}selected{% endif %}>{{ choice }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="content">내용 *</label>
+      <textarea id="content" name="content" rows="8"
+                class="{% if errors.content %}is-invalid{% endif %}"
+                placeholder="무엇을 배웠고, 무엇이 어려웠는지 적어보세요.">{{ values.content or '' }}</textarea>
+      {% if errors.content %}<p class="field__error">{{ errors.content }}</p>{% endif %}
+    </div>
+
+    <div class="actions">
+      <button type="submit" class="btn btn--primary">
+        {% if mode == 'create' %}저장{% else %}수정 저장{% endif %}
+      </button>
+      {# 과제 요구: 목록으로 돌아갈 수 있는 취소 링크 #}
+      <a class="btn" href="{% if mode == 'edit' %}/logs/{{ log_id }}{% else %}/logs{% endif %}">취소</a>
+    </div>
+  </form>
+{% endblock %}

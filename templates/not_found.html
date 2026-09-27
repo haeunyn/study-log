@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}찾을 수 없습니다{% endblock %}
+
+{% block content %}
+  {# 과제 요구: 존재하지 않는 데이터 조회 시 적절한 안내 화면 #}
+  <section class="notfound">
+    <h1>404</h1>
+    {% if log_id %}
+      <p>#{{ log_id }} 번 학습 기록을 찾을 수 없습니다.</p>
+      <p class="muted">이미 삭제되었거나, 주소를 잘못 입력했을 수 있습니다.</p>
+    {% else %}
+      <p>요청하신 페이지를 찾을 수 없습니다.</p>
+      {% if path %}<p class="muted"><code>{{ path }}</code></p>{% endif %}
+    {% endif %}
+    <div class="actions">
+      <a class="btn btn--primary" href="/logs">목록으로 가기</a>
+      <a class="btn" href="/">홈으로</a>
+    </div>
+  </section>
+{% endblock %}

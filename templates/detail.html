@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}{{ log.title }}{% endblock %}
+
+{% block content %}
+  {# 과제 요구: 상세 화면에는 해당 데이터의 전체 필드가 표시되어야 한다 #}
+  <article class="detail">
+    <h1>{{ log.title }}</h1>
+
+    <dl class="fields">
+      <div><dt>학습일</dt><dd>{{ log.studied_on }}</dd></div>
+      <div><dt>분야</dt><dd><span class="tag">{{ log.category }}</span></dd></div>
+      <div><dt>학습 시간</dt><dd>{{ log.duration_text }} ({{ log.minutes }}분)</dd></div>
+      <div><dt>기록 번호</dt><dd>#{{ log.id }}</dd></div>
+      <div><dt>작성 시각</dt><dd>{{ log.created_at.strftime('%Y-%m-%d %H:%M') }}</dd></div>
+    </dl>
+
+    <h2>내용</h2>
+    {# |e 로 HTML 이스케이프 (Jinja2 는 기본으로 해주지만 명시적으로 표시),
+       줄바꿈을 <br> 로 바꿔 사용자가 입력한 줄바꿈을 살린다 #}
+    <div class="content">{{ log.content }}</div>
+  </article>
+
+  {# 과제 요구: 수정 링크, 삭제 버튼, 목록으로 돌아가는 링크 (보너스 3: UX) #}
+  <div class="actions">
+    <a class="btn" href="/logs">← 목록으로</a>
+    <a class="btn btn--primary" href="/logs/{{ log.id }}/edit">수정</a>
+
+    {# 삭제는 반드시 POST. 링크(GET)로 만들면 브라우저가 미리 훑기만 해도 지워질 수 있다.
+       onsubmit 확인창은 실수로 누르는 것을 막기 위한 최소한의 장치다. #}
+    <form method="post" action="/logs/{{ log.id }}/delete" class="inline-form"
+          onsubmit="return confirm('이 기록을 삭제할까요? 되돌릴 수 없습니다.');">
+      <button type="submit" class="btn btn--danger">삭제</button>
+    </form>
+  </div>
+{% endblock %}

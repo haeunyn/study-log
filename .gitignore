@@ -1,0 +1,14 @@
+# 가상환경
+.venv/
+venv/
+
+# 데이터베이스 (개인 학습 기록이므로 저장소에 올리지 않는다)
+*.db
+*.sqlite3
+
+# 파이썬
+__pycache__/
+*.py[cod]
+
+# macOS
+.DS_Store

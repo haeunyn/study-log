@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}기록 목록{% endblock %}
+
+{% block content %}
+  <div class="page-head">
+    <h1>기록 목록</h1>
+    <a class="btn btn--primary" href="/logs/new">새 기록</a>
+  </div>
+
+  {# 보너스 1: 검색. GET 이므로 조건이 주소(?q=)에 남는다 #}
+  <form class="search" method="get" action="/logs">
+    <input type="text" name="q" value="{{ keyword }}" placeholder="제목으로 검색">
+    <button type="submit" class="btn">검색</button>
+    {% if keyword %}<a class="btn btn--ghost" href="/logs">초기화</a>{% endif %}
+  </form>
+
+  {% if logs %}
+    <table class="table">
+      <thead>
+        <tr><th>학습일</th><th>제목</th><th>분야</th><th>시간</th><th></th></tr>
+      </thead>
+      <tbody>
+        {% for log in logs %}
+          <tr>
+            <td>{{ log.studied_on }}</td>
+            <td><a href="/logs/{{ log.id }}">{{ log.title }}</a></td>
+            <td><span class="tag">{{ log.category }}</span></td>
+            <td class="num">{{ log.duration_text }}</td>
+            <td><a class="btn btn--sm" href="/logs/{{ log.id }}">상세보기</a></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <p class="muted">총 {{ logs|length }}건</p>
+  {% else %}
+    <p class="empty">
+      {% if keyword %}
+        '{{ keyword }}' 에 해당하는 기록이 없습니다. <a href="/logs">전체 보기</a>
+      {% else %}
+        아직 기록이 없습니다. <a href="/logs/new">첫 기록을 남겨보세요.</a>
+      {% endif %}
+    </p>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,33 @@
+{# base.html — 모든 화면이 공유하는 뼈대.
+
+   Jinja2 의 상속을 쓰는 이유:
+     머리말/꼬리말/스타일 링크를 화면마다 복사하면, 메뉴 하나 바꿀 때 5개 파일을 고쳐야 한다.
+     여기에 한 번 쓰고 {% block %} 자리만 각 화면이 채우도록 했다. #}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}학습 로그{% endblock %}</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav">
+      <a class="nav__logo" href="/">📚 학습 로그</a>
+      <div class="nav__links">
+        <a href="/logs">목록</a>
+        <a href="/logs/new">새 기록</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <p>Codyssey AI 올인원 2기 · B6-2 미션 · FastAPI + SQLAlchemy + Jinja2</p>
+  </footer>
+</body>
+</html>
